@@ -1,5 +1,5 @@
 venv
 .idea
-__pycashe__/
+__pycash__/
 .env
 db.sqlite3
