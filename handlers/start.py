@@ -1,6 +1,8 @@
+import  sqlite3
 from  aiogram import types,Dispatcher
 from config import bot
 from database.sql_commands import Database
+from keyboards.inline_buttons import start_keyboard
 
 
 
@@ -12,10 +14,19 @@ async def start_button(message: types.Message):
         first_name=message.from_user.first_name,
         last_name=message.from_user.last_name
     )
-    await bot.send_message(
-        chat_id=message.chat.id,
-        text=f"Hi,I'm your helper bot"
-    )
+    # await bot.send_message(
+    #     chat_id=message.chat.id,
+    #     text=f"Hi,I'm your helper bot",
+    #     reply_markup=await start_keyboard()
+    #
+    # )
+    with open('C:/Users/acer/PycharmProjects/choposhssbot/media/bot_gif.gif','rb') as gif:
+        await bot.send_animation(
+            chat_id=message.chat.id,
+            animation=gif,
+            caption=f"Hi, {message.from_user.first_name} I'm your bot",
+            reply_markup=await start_keyboard()
+        )
 
 
 def register_start_handlers(dp:Dispatcher):
