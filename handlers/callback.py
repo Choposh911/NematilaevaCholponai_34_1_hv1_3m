@@ -1,35 +1,35 @@
-from aiogram import types, Dispatcher
+from aiogram import types, dispatcher
 from config import bot
-from keyboards.inline_buttons import questionnaire_one_keyboard
+from keyboards.inline_buttons import quesionnaire_one_keybords
+
+async def start_quesionnaire(call: types.callback_query):
+  print(call)
+  await bot.send_message(
+    chat_id=call.message.chat.id,
+    text="Do you want to go on a trip?",
+    reply_markup=await quesionnaire_one_keybords()
+  )
 
 
-
-async def start_questionnaire(call: types.CallbackQuery):
-    with open("C:/Users/acer/PycharmProjects/choposhssbot/media/areuready.gif", 'rb') as animation:
-        await bot.send_animation(
-            chat_id=call.message.chat.id,
-            animation=animation,
-            caption=f"DO YOU WANT TO KNOW YOUR ENGLISH LEVEL?",
-            reply_markup=await questionnaire_one_keyboard()
-        )
+async def yes_answer(call: types.callback_query):
+  await bot.edit_message_text(
+    chat_id=call.message.chat.id,
+    message_id=call.message.message_id,
+    text="You'll have a trip soon",
+  )
 
 
-async def yes_answer(call: types.CallbackQuery):
-    await  bot.send_message(
-        chat_id=call.message.chat.id,
-        text=f"LET'S START!"
-    )
-def register_callback_handlers(dp: Dispatcher):
-    dp.register_callback_query_handler(start_questionnaire, lambda call: call.data == "start_questionnaire")
-    dp.register_callback_query_handler(yes_answer, lambda call: call.data == "yes_start")
-    dp.register_callback_query_handler(no_answer, lambda call: call.data == "no_start")
+async def no_answer(call: types.callback_query):
+  await bot.edit_message_text(
+    chat_id=call.message.chat.id,
+    message_id=call.message.message_id,
+    text="Don't forget to take a break",
+  )
 
-
-async def no_answer(call: types.CallbackQuery):
-    await  bot.send_message(
-        chat_id=call.message.chat.id,
-        text=f"OK!"
-    )
-
-
-
+def reqister_callback_handlers(dp: dispatcher):
+  dp.register_callback_query_handler(start_quesionnaire,
+                                      lambda call: call.data == "start_quesionnaire")
+  dp.register_callback_query_handler(yes_answer,
+                                     lambda call: call.data == "yes_trip")
+  dp.register_callback_query_handler(no_answer,
+                                     lambda call: call.data == "no_trip")
